@@ -1,0 +1,20 @@
+[Unit]
+Description=calmirror traffic-aware commute blocks
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Adjust the path to where you cloned calmirror.
+ExecStart=/usr/bin/env node %h/calmirror/bin/commute-sync.cjs
+# Optional: Environment=CALMIRROR_CONFIG=%h/.config/calmirror/config.json
+# Optional: EnvironmentFile=-%h/.config/calmirror/env
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=default.target

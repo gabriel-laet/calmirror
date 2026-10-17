@@ -1,0 +1,12 @@
+[Unit]
+Description=Run calmirror busy-block sync every 5min
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+RandomizedDelaySec=30s
+Persistent=true
+Unit=calmirror-calendar-sync.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,13 @@
+#!/bin/sh
+# Template wrapper: runs gog with a dedicated home + file keyring so the
+# systemd timers can use it non-interactively. Copy to ~/.local/bin/calmirror-gog,
+# chmod 700, and keep the password file chmod 600. Never commit the password.
+set -eu
+
+GOG_HOME="${CALMIRROR_GOG_HOME:-$HOME/.config/calmirror/gog}"
+GOG_KEYRING_BACKEND=file
+GOG_KEYRING_PASSWORD="$(sed -n '1p' "$GOG_HOME/.keyring-password")"
+
+export GOG_HOME GOG_KEYRING_BACKEND GOG_KEYRING_PASSWORD
+
+exec "${GOG_BIN:-gog}" --home="$GOG_HOME" "$@"

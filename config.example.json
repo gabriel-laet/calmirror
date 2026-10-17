@@ -1,0 +1,57 @@
+{
+  "gog": "~/.local/bin/calmirror-gog",
+  "timezone": "America/New_York",
+  "propPrefix": "calmirror",
+
+  "accounts": [
+    { "alias": "personal", "label": "Personal", "account": "me@example.com", "colorId": "3" },
+    { "alias": "work", "label": "Work", "account": "me@work.example.com", "colorId": "10" },
+    { "alias": "side", "label": "Side project", "account": "me@side.example.org", "colorId": "9" },
+    {
+      "alias": "family",
+      "label": "Personal",
+      "account": "me@example.com",
+      "calendarId": "YOUR_SHARED_CALENDAR_ID@group.calendar.google.com",
+      "colorId": "3",
+      "destination": false,
+      "skipDestinations": ["personal"],
+      "ignoreEventsUpToMinutes": 15
+    }
+  ],
+
+  "sync": {
+    "windowDays": 180,
+    "busySummary": "Busy — {labels}",
+    "mixedColorId": "8",
+    "concurrency": 2
+  },
+
+  "workMode": {
+    "enabled": true,
+    "blockAccount": "personal",
+    "markerAccount": "work",
+    "markerMinutes": 15,
+    "workAccounts": ["work", "side"],
+    "summary": "💻 Work Mode",
+    "colorId": "8",
+    "schedule": {
+      "Mon": ["09:00", "18:00"],
+      "Tue": ["09:00", "18:00"],
+      "Wed": ["09:00", "18:00"],
+      "Thu": ["09:00", "18:00"],
+      "Fri": ["09:00", "17:00"]
+    }
+  },
+
+  "commute": {
+    "accounts": ["personal", "side", "work"],
+    "homeAddress": "1 Example Street, Springfield",
+    "routesKeyFile": "~/.config/calmirror/routes-api-key",
+    "travelMode": "DRIVE",
+    "languageCode": "en-US",
+    "marginMinutes": 10,
+    "chainGapMinutes": 150,
+    "windowDays": 21,
+    "colorId": "6"
+  }
+}
