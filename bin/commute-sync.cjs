@@ -31,6 +31,15 @@ const LABELS = {
   return: '🚗 Commute · return',
   ...(commute.labels || {}),
 };
+const DESCRIPTION = commute.description || [
+  'calmirror estimate: {minutes} min travel + {margin} min margin.',
+  'Approx. distance: {distance}.',
+  'From: {origin}',
+  'To: {destination}',
+  'For: {event}',
+];
+const DECIMAL_SEPARATOR = commute.decimalSeparator || '.';
+const DEFAULT_TITLE = commute.defaultEventTitle || 'Appointment';
 const DAY_MS = 24 * 60 * 60 * 1000;
 const MINUTE_MS = 60 * 1000;
 const DRY_RUN = process.argv.includes('--dry-run');
@@ -92,7 +101,7 @@ function normalizePhysicalEvent(account, event) {
     key: hash(identity).slice(0, 48),
     identity,
     account,
-    summary: String(event.summary || 'Appointment').trim(),
+    summary: String(event.summary || DEFAULT_TITLE).trim(),
     location,
     startMs,
     endMs,
@@ -215,7 +224,7 @@ async function computeRoute(apiKey, segment) {
 
 function formatDistance(distanceMeters) {
   if (distanceMeters < 1000) return `${Math.round(distanceMeters)} m`;
-  return `${(distanceMeters / 1000).toFixed(1)} km`;
+  return `${(distanceMeters / 1000).toFixed(1).replace('.', DECIMAL_SEPARATOR)} km`;
 }
 
 function buildDesired(segment, route, routeCache) {
@@ -224,13 +233,17 @@ function buildDesired(segment, route, routeCache) {
   const startMs = segment.role === 'return' ? segment.anchorMs : segment.anchorMs - blockedMs;
   const endMs = segment.role === 'return' ? segment.anchorMs + blockedMs : segment.anchorMs;
   const summary = LABELS[segment.role];
-  const description = [
-    `calmirror estimate: ${routeMinutes} min travel + ${MARGIN_MINUTES} min margin.`,
-    `Approx. distance: ${formatDistance(route.distanceMeters)}.`,
-    `From: ${segment.origin}`,
-    `To: ${segment.destination}`,
-    `For: ${segment.sourceEvent.summary}`,
-  ].join('\n');
+  const values = {
+    minutes: routeMinutes,
+    margin: MARGIN_MINUTES,
+    distance: formatDistance(route.distanceMeters),
+    origin: segment.origin,
+    destination: segment.destination,
+    event: segment.sourceEvent.summary,
+  };
+  const description = DESCRIPTION
+    .map((line) => line.replace(/\{(\w+)\}/g, (match, key) => (key in values ? String(values[key]) : match)))
+    .join('\n');
   const fingerprint = hash(JSON.stringify({ startMs, endMs, summary, description, destination: segment.destination, routeCache })).slice(0, 48);
 
   return {

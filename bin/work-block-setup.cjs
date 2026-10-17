@@ -57,7 +57,7 @@ function main() {
     if (existingKeys.has(schedule.key)) continue;
     const body = {
       summary: workMode.summary || '💻 Work Mode',
-      description: 'Managed by calmirror. Stretched daily to cover real work events.',
+      description: workMode.description || 'Managed by calmirror. Stretched daily to cover real work events.',
       colorId: String(workMode.colorId || '8'),
       start: { dateTime: schedule.start, timeZone: TIMEZONE },
       end: { dateTime: schedule.end, timeZone: TIMEZONE },

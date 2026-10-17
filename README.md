@@ -51,7 +51,7 @@ Set `"gog"` in the config (or `CALMIRROR_GOG`) to the wrapper path.
 | `workMode.workAccounts` | calendars whose events stretch the daily window |
 | `workMode.markerAccount` | optional calendar holding `work_start`/`work_end` markers |
 | `workMode.schedule` | `Mon`..`Sun` → `["HH:MM","HH:MM"]` |
-| `commute.*` | accounts to scan, home address, Routes key file, travel mode, margins |
+| `commute.*` | accounts to scan, home address, Routes key file, travel mode, margins, `labels`, `description` (lines with `{minutes}` `{margin}` `{distance}` `{origin}` `{destination}` `{event}`), `decimalSeparator`, `defaultEventTitle` |
 
 Environment overrides: `CALMIRROR_CONFIG`, `CALMIRROR_GOG`, `CALMIRROR_TZ`, `CALMIRROR_HOME_ADDRESS`, `GOOGLE_ROUTES_API_KEY`, `CALMIRROR_ROUTES_KEY_FILE`. Keep secrets out of the config file you share; put the Routes key in `~/.config/calmirror/routes-api-key` (`chmod 600`) or in an `EnvironmentFile`.
 
